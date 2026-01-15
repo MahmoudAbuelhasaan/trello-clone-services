@@ -30,6 +30,8 @@ ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS',[])
 
 # Application definition
 
+
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -38,6 +40,19 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
+third_party_apps = [
+    'rest_framework',
+]
+
+apps = [
+
+]
+
+
+INSTALLED_APPS += apps
+INSTALLED_APPS += third_party_apps
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -74,8 +89,12 @@ WSGI_APPLICATION = 'users.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DB_NAME','trello_auth'),
+        'USER': os.getenv('DB_USER','postgres'),
+        'PASSWORD': os.getenv('DB_PASSWORD','12345'),
+        'HOST': os.getenv('DB_HOST','localhost'),
+        'PORT': os.getenv('DB_PORT','5433'),
     }
 }
 
