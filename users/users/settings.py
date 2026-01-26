@@ -46,6 +46,7 @@ third_party_apps = [
 ]
 
 apps = [
+    'accounts',
 
 ]
 
