@@ -148,3 +148,11 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
+
+# celery sitting
+
+CELERY_BROKER_URL=os.getenv('CELERY_BROKER_URL','amqp://guest:guest@rabbitmq-service:5672//')
+CELERY_RESULT_BACKEND=os.getenv('CELERY_RESULT_BACKEND','redis://redis-service:6379/0')
+
+# custom user model
+AUTH_USER_MODEL='accounts.User'
