@@ -43,3 +43,10 @@ class UserRigisterSerializer(serializers.ModelSerializer):
         UserProfile.objects.create(user=user)
         return user
     
+class UserSerializer(serializers.ModelSerializer):
+    """Serializer for User model."""
+    class Meta:
+        model = User
+        fields = '__all__'
+        read_only_fields = ('id', 'date_joined', 'last_login')
+    
