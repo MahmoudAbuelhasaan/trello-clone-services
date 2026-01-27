@@ -4,6 +4,8 @@ services:
     container_name: users_service
     depends_on:
       - auth_db
+      - auth-celery
+      - rabbitmq
     ports:
       - "8000:8000"
     environment:
@@ -12,6 +14,8 @@ services:
       DB_PASSWORD: 12345
       DB_HOST: auth_db
       DB_PORT: 5432
+    volumes:
+      - ./users:/app
   auth_db:
     image: postgres:16
     container_name: auth_db
@@ -21,3 +25,28 @@ services:
       POSTGRES_DB: trello_auth
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 12345
+  redis:
+    image: redis:7.4.7-alpine
+    container_name: redis-service
+    ports:
+      - "6379:6379"
+
+  rabbitmq:
+    image: rabbitmq:4.2.1-management
+    container_name: rabbitmq-service
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest 
+  auth-celery:
+    build: ./users
+    container_name: auth-celery
+    depends_on:
+      - redis
+      - rabbitmq
+    environment:
+      CELERY_BROKER_URL: amqp://guest:guest@rabbitmq-service:5672//
+      CELERY_RESULT_BACKEND: redis://redis-service:6379/0
+     
