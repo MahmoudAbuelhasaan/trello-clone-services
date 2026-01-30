@@ -44,6 +44,7 @@ INSTALLED_APPS = [
 third_party_apps = [
     'rest_framework',
     'rest_framework_simplejwt',
+    'drf_yasg',
 ]
 
 apps = [
@@ -136,6 +137,13 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
@@ -156,3 +164,10 @@ CELERY_RESULT_BACKEND=os.getenv('CELERY_RESULT_BACKEND','redis://redis-service:6
 
 # custom user model
 AUTH_USER_MODEL='accounts.User'
+
+# Swagger settings
+SWAGGER_SETTINGS = {
+    'DEFAULT_MODEL_RENDERING': 'example',
+    'USE_SESSION_AUTH': False,
+    'JSON_EDITOR': False,  # Disable JSON editor, show form fields instead
+}

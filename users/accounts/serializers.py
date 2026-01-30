@@ -47,6 +47,9 @@ class UserSerializer(serializers.ModelSerializer):
     """Serializer for User model."""
     class Meta:
         model = User
-        fields = '__all__'
+        # fields = '__all__'
+        # execlode password from serialization
+        exclude = ('password','is_superuser','is_staff','is_active','groups','user_permissions')
+
         read_only_fields = ('id', 'date_joined', 'last_login')
     

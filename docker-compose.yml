@@ -69,4 +69,19 @@ services:
       CELERY_BROKER_URL: amqp://guest:guest@rabbitmq-service:5672//
       CELERY_RESULT_BACKEND: redis://redis-service:6379/0
     command: sh -c "celery -A users worker --loglevel=info"
-      
+  
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    depends_on:
+      - auth_db
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+
+volumes:
+  pgadmin_data: 
