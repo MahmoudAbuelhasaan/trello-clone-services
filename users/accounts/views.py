@@ -6,11 +6,14 @@ from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
+import logging
 
 from .models import User, UserProfile
 from .serializers import UserRigisterSerializer, UserSerializer, loginSerializer
 from .tasks import send_welcome_email
 
+
+logger = logging.getLogger(__name__)
 
 class UserRegisterationView(APIView):
     """API view for user registration."""
@@ -116,7 +119,9 @@ class UserLoginView(APIView):
         serializer = loginSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.validated_data.get("user")
+            
             login(request, user)
+            logger.info(f"User {user.email} logged in successfully.")
             refresh = RefreshToken.for_user(user)
             return Response(
                 {
@@ -129,6 +134,7 @@ class UserLoginView(APIView):
                 },
                 status=status.HTTP_200_OK,
             )
-
+        
+        logger.error(f"Login failed for email: {request.data.get('email')}. Errors: {serializer.errors}")
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             
